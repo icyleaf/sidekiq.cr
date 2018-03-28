@@ -42,6 +42,8 @@ module Sidekiq
     end
 
     def create(logger = @logger)
+      @logger = logger if logger != @logger
+
       Sidekiq::Server.new(concurrency: @concurrency,
         queues: @queues,
         environment: @environment,
@@ -57,13 +59,14 @@ module Sidekiq
 
     def run(svr)
       # hack to avoid printing banner in test suite
-      print_banner if logger == @logger
-      logger.info "Sidekiq v#{Sidekiq::VERSION} in Crystal #{Crystal::VERSION}"
-      logger.info Sidekiq::LICENSE
-      logger.info "Upgrade to Sidekiq Enterprise for more features and support: http://sidekiq.org"
-      logger.info "Starting processing with #{@concurrency} workers"
+      print_banner
 
-      logger.debug { self.inspect }
+      @logger.info "Sidekiq v#{Sidekiq::VERSION} in Crystal #{Crystal::VERSION}"
+      @logger.info Sidekiq::LICENSE
+      @logger.info "Upgrade to Sidekiq Enterprise for more features and support: http://sidekiq.org"
+      @logger.info "Starting processing with #{@concurrency} workers"
+
+      @logger.debug { self.inspect }
 
       svr.start
       shutdown_started_at = nil
@@ -83,7 +86,7 @@ module Sidekiq
         svr.request_stop
       end
 
-      logger.info "Press Ctrl-C to stop"
+      @logger.info "Press Ctrl-C to stop"
       # We block here infinitely until signalled to shutdown
       channel.receive
 
@@ -93,11 +96,11 @@ module Sidekiq
       end
 
       if !svr.processors.empty?
-        logger.info "Re-enqueuing #{svr.processors.size} busy jobs"
+        @logger.info "Re-enqueuing #{svr.processors.size} busy jobs"
         svr.fetcher.bulk_requeue(svr, svr.processors.map { |p| p.job }.compact)
       end
 
-      logger.info "Done, bye!"
+      @logger.info "Done, bye!"
       exit(0)
     end
 
