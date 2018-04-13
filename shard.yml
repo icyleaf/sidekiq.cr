@@ -13,6 +13,8 @@ dependencies:
   pool:
     github: ysbaddaden/pool
     version: ~> 0.2.3
+
+development_dependencies:
   kemal:
     github: kemalcr/kemal
     version: ~> 0.22.0
