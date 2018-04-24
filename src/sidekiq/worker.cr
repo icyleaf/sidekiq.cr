@@ -98,7 +98,7 @@ module Sidekiq
             def perform_at(interval : Time, \{{args_list}})
               _perform_at(interval, \{{json}})
             end
-            def perform_in(interval : Time::Span, \{{args_list}})
+            def perform_in(interval : Time::Span | Time::MonthSpan, \{{args_list}})
               _perform_in(interval, \{{json}})
             end
           end

@@ -87,12 +87,11 @@ module Sidekiq
     end
 
     # Run this job +interval+ from now.
-    def _perform_in(interval : Time::Span, args : String)
-      now = Time.now
-      ts = now + interval
+    def _perform_in(interval : Time::Span | Time::MonthSpan, args : String)
+      ts = interval.from_now
 
       @args = args
-      @at = ts if ts > now
+      @at = ts if ts > Time.now
 
       client.push(self)
     end
