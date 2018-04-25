@@ -49,7 +49,8 @@ describe Sidekiq::Worker do
       ComplexWorker.async.perform(a, Circle.new(9, 17))
       msg = Sidekiq.redis { |c| c.lpop("queue:default") }
       job = Sidekiq::Job.from_json(msg.as(String))
-      job.args.should eq("[[{\"x\":1.0,\"y\":3.0},{\"x\":4.3,\"y\":12.5}],{\"radius\":9,\"diameter\":17}]")
+      job.args(true).should eq("[[{\"x\":1.0,\"y\":3.0},{\"x\":4.3,\"y\":12.5}],{\"radius\":9,\"diameter\":17}]")
+      job.args.should eq([[{ "x" => 1.0, "y" => 3.0},{"x" => 4.3, "y" => 12.5}],{"radius" => 9, "diameter" => 17}])
       job.execute(MockContext.new)
     end
 
@@ -57,7 +58,8 @@ describe Sidekiq::Worker do
       NoArgumentsWorker.async.perform
       msg = Sidekiq.redis { |c| c.lpop("queue:default") }
       job = Sidekiq::Job.from_json(msg.as(String))
-      job.args.should eq("[]")
+      job.args(true).should eq("[]")
+      job.args.should eq([] of JSON::Any)
       job.execute(MockContext.new)
     end
   end

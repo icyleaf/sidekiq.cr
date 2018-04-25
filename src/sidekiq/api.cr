@@ -205,7 +205,7 @@ module Sidekiq
 
     def display_args : String
       # TODO Unwrap known wrappers so they show up in a human-friendly manner in the Web UI
-      args
+      args(raw_value: true).as(String)
     end
 
     def latency
