@@ -25,7 +25,7 @@ module Sidekiq
       queue:      String,
       jid:        String,
       klass:      {type: String, key: "class"},
-      args:       {type: String, converter: String::RawConverter, getter: false},
+      args:       {type: String, converter: String::RawConverter},
       created_at: {type: Time, converter: Sidekiq::EpochConverter},
 
       at:              {type: Time, converter: Sidekiq::EpochConverter, nilable: true},
