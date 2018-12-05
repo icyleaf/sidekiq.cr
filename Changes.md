@@ -1,5 +1,22 @@
 # Sidekiq.cr Changelog
 
+0.7.2
+----------
+
+- Fixes `perform_at` for Workers.
+
+0.7.1
+----------
+
+- Fixes unix format.
+
+0.7.0
+----------
+
+- Cyrstal 0.27.0 support
+- Adds `perform_in` with `Time::MonthSpan` support.
+- Changes kemal to development dependency.
+
 0.6.1
 ----------
 
