@@ -87,17 +87,14 @@ module Sidekiq
 
     # Run this job at or after the given instant in Time
     def _perform_at(interval : Time, args : String)
-      perform_in(interval.to_unix_f, args)
+      @args = args
+      @at = interval if interval > Time.now
+      client.push(self)
     end
 
     # Run this job +interval+ from now.
     def _perform_in(interval : Time::Span | Time::MonthSpan, args : String)
-      ts = interval.from_now
-
-      @args = args
-      @at = ts if ts > Time.now
-
-      client.push(self)
+      _perform_at(interval.from_now, args)
     end
   end
 end
