@@ -33,6 +33,7 @@ zh-cn: # <---- change this to your locale code
   NextRetry: 下次重试
   RetryCount: 重试次數
   RetryNow: 现在重试
+  Kill: Kill
   LastRetry: 最后一次重试
   OriginallyFailed: 原本已失败
   AreYouSure: 你确定？
@@ -66,3 +67,14 @@ zh-cn: # <---- change this to your locale code
   Thread: 线程
   Threads: 线程
   Jobs: 作业
+  Paused: 暂停
+  Stop: 停止
+  Quiet: Quiet
+  StopAll: 全部停止
+  QuietAll: Quiet All
+  PollingInterval: 更新间隔
+  Plugins: 插件
+  NotYetEnqueued: 暂无队列
+  CreatedAt: 创建时间
+  BackToApp: Back to App
+  Name: 名称
