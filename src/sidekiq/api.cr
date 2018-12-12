@@ -347,10 +347,10 @@ module Sidekiq
     end
 
     def at
-      Time.unix_ms((score * 1000).to_i64)
+      Time.unix_ms((score * 1000).to_i64).in(Sidekiq.default_timezone)
     rescue ArgumentError
       # Rescue: Invalid time: seconds out of range (ArgumentError)
-      Time.unix_ms((score.to_i32 * 1000).to_i64)
+      Time.unix_ms((score.to_i32 * 1000).to_i64).in(Sidekiq.default_timezone)
     end
 
     def delete

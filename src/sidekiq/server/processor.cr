@@ -141,7 +141,7 @@ module Sidekiq
     end
 
     def stats(job)
-      @@worker_state[@identity] = {"queue" => job.queue, "payload" => job, "run_at" => Time.now.to_unix}
+      @@worker_state[@identity] = {"queue" => job.queue, "payload" => job, "run_at" => Time.now(Sidekiq.default_timezone).to_unix}
 
       begin
         yield
