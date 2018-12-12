@@ -36,7 +36,7 @@ module Sidekiq
     def locale
       @locale ||= begin
         locale = "en"
-        languages = request.headers["HTTP_ACCEPT_LANGUAGE"]? || "en"
+        languages = request.headers["Accept-Language"]? || "en"
         languages.downcase.split(",").each do |lang|
           next if lang == "*"
           lang = lang.split(";")[0]
