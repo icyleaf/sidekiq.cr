@@ -82,7 +82,7 @@ module Sidekiq
       default_queue_latency = if (entry = pipe1_res[6].as(Array(Redis::RedisValue)).first?)
                                 hash = JSON.parse(entry.as(String))
                                 was = hash["enqueued_at"].as_f
-                                Time.now.to_unix_f - was
+                                Time.now(Sidekiq.default_timezone).to_unix_f - was
                               else
                                 0.0_f64
                               end
@@ -145,7 +145,7 @@ module Sidekiq
 
       def initialize(days_previous, start_date = nil)
         @days_previous = days_previous
-        @start_date = start_date || Time.now.to_utc.date
+        @start_date = start_date || Time.now(Sidekiq.default_timezone).date
       end
 
       def processed
@@ -164,7 +164,7 @@ module Sidekiq
 
         while i < @days_previous
           date = @start_date - i.days
-          datestr = date.to_s("%Y-%m-%d")
+          datestr = date.in(Sidekiq.default_timezone).to_s("%Y-%m-%d")
           keys << "stat:#{stat}:#{datestr}"
           dates << datestr
           i += 1
@@ -209,7 +209,7 @@ module Sidekiq
     end
 
     def latency
-      (Time.now.to_utc - (enqueued_at || created_at)).to_f
+      (Time.now(Sidekiq.default_timezone) - (enqueued_at || created_at)).to_f
     end
 
     # #
@@ -293,7 +293,7 @@ module Sidekiq
 
       hash = JSON.parse(msg).as_h
       was = hash["enqueued_at"].as_f
-      Time.now.to_unix_f - was
+      Time.now(Sidekiq.default_timezone).to_unix_f - was
     end
 
     def each
@@ -347,10 +347,10 @@ module Sidekiq
     end
 
     def at
-      Time.unix_ms((score * 1000).to_i64)
+      Time.unix_ms((score * 1000).to_i64).in(Sidekiq.default_timezone)
     rescue ArgumentError
       # Rescue: Invalid time: seconds out of range (ArgumentError)
-      Time.unix_ms((score.to_i32 * 1000).to_i64)
+      Time.unix_ms((score.to_i32 * 1000).to_i64).in(Sidekiq.default_timezone)
     end
 
     def delete
@@ -389,7 +389,7 @@ module Sidekiq
     def kill!
       raise "Kill not available on jobs which have not failed" unless item["failed_at"]
       remove_job do |message|
-        now = Time.now.to_unix_f
+        now = Time.now(Sidekiq.default_timezone).to_unix_f
         Sidekiq.redis do |conn|
           conn.multi do |m|
             m.zadd("dead", now, message)
@@ -637,7 +637,7 @@ module Sidekiq
     end
 
     def started_at
-      Time.unix_ms((self["started_at"].as_f * 1000).to_i64)
+      Time.unix_ms((self["started_at"].as_f * 1000).to_i64).in(Sidekiq.default_timezone)
     end
 
     def tag

@@ -7,7 +7,9 @@ module Sidekiq
   class CLI
     getter logger : ::Logger
 
-    def initialize(args = ARGV)
+    def initialize(args = ARGV, *, timezone = Sidekiq::TIMEZONE)
+      Sidekiq.default_timezone = timezone
+
       @concurrency = 25
       @queues = [] of String
       @timeout = 8
@@ -73,12 +75,12 @@ module Sidekiq
       channel = Channel(Int32).new
 
       Signal::INT.trap do
-        shutdown_started_at = Time.now
+        shutdown_started_at = Time.now(Sidekiq.default_timezone)
         svr.request_stop
         channel.send 0
       end
       Signal::TERM.trap do
-        shutdown_started_at = Time.now
+        shutdown_started_at = Time.now(Sidekiq.default_timezone)
         svr.request_stop
         channel.send 0
       end
@@ -91,7 +93,7 @@ module Sidekiq
       channel.receive
 
       deadline = shutdown_started_at.not_nil! + @timeout.seconds
-      while Time.now < deadline && !svr.processors.empty?
+      while Time.now(Sidekiq.default_timezone) < deadline && !svr.processors.empty?
         sleep 0.1
       end
 

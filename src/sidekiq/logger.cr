@@ -4,32 +4,6 @@ module Sidekiq
   class Logger
     SPACE = " "
 
-    PRETTY = ::Logger::Formatter.new do |severity, time, progname, message, io|
-      # 2016-05-19T04:19:24.323Z
-      time.to_utc.to_s("%FT%T.%LZ", io)
-      io << " "
-      io << ::Process.pid
-      io << " TID-"
-      Fiber.current.object_id.to_s(36, io)
-      io << " "
-      io << Sidekiq::Logger.context
-      io << " "
-      io << severity
-      io << ": "
-      io << message
-    end
-    NO_TS = ::Logger::Formatter.new do |severity, time, progname, message, io|
-      io << ::Process.pid
-      io << " TID-"
-      Fiber.current.object_id.to_s(36, io)
-      io << " "
-      io << Sidekiq::Logger.context
-      io << " "
-      io << severity
-      io << ": "
-      io << message
-    end
-
     def self.context
       c = Fiber.current.logging_context
       c && c.size > 0 ? " #{c.join(SPACE)}" : ""
@@ -46,8 +20,26 @@ module Sidekiq
     def self.build(log_target = STDOUT)
       logger = ::Logger.new(log_target)
       logger.level = ::Logger::INFO
-      logger.formatter = ENV["DYNO"]? ? NO_TS : PRETTY
+      logger.formatter = with_logger_format
       logger
+    end
+
+    private def self.with_logger_format
+      ::Logger::Formatter.new do |severity, time, progname, message, io|
+        unless ENV["DYNO"]?
+          time.in(Sidekiq.default_timezone).to_s("%FT%T.%L%z", io)
+          io << " "
+        end
+        io << ::Process.pid
+        io << " TID-"
+        Fiber.current.object_id.to_s(36, io)
+        io << " "
+        io << Sidekiq::Logger.context
+        io << " "
+        io << severity
+        io << ": "
+        io << message
+      end
     end
   end
 end

@@ -98,7 +98,7 @@ module Sidekiq
     end
 
     def relative_time(time)
-      %{<time datetime="#{time.to_utc.to_s("%Y-%m-%dT%H:%M:%SZ")}">#{time}</time>}
+      %{<time datetime="#{time.in(Sidekiq.default_timezone).to_s("%FTT%T%:z")}">#{time}</time>}
     end
 
     def job_params(job, score)

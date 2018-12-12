@@ -18,22 +18,22 @@ end
 describe "sidekiq web" do
   it "can show text with any locales" do
     empty = {} of String => String
-    rackenv = {"HTTP_ACCEPT_LANGUAGE" => "ru,en"}
+    rackenv = {"Accept-Language" => "ru,en"}
     get "/", empty, rackenv
     assert_match(/Панель управления/, last_response.body)
-    rackenv = {"HTTP_ACCEPT_LANGUAGE" => "es,en"}
+    rackenv = {"Accept-Language" => "es,en"}
     get "/", empty, rackenv
     assert_match(/Panel de Control/, last_response.body)
-    rackenv = {"HTTP_ACCEPT_LANGUAGE" => "en-us"}
+    rackenv = {"Accept-Language" => "en-us"}
     get "/", empty, rackenv
     assert_match(/Dashboard/, last_response.body)
-    rackenv = {"HTTP_ACCEPT_LANGUAGE" => "zh-cn"}
+    rackenv = {"Accept-Language" => "zh-cn"}
     get "/", empty, rackenv
     assert_match(/信息板/, last_response.body)
-    rackenv = {"HTTP_ACCEPT_LANGUAGE" => "zh-tw"}
+    rackenv = {"Accept-Language" => "zh-tw"}
     get "/", empty, rackenv
     assert_match(/資訊主頁/, last_response.body)
-    rackenv = {"HTTP_ACCEPT_LANGUAGE" => "nb"}
+    rackenv = {"Accept-Language" => "nb"}
     get "/", empty, rackenv
     assert_match(/Oversikt/, last_response.body)
   end
