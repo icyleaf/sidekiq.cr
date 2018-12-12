@@ -35,6 +35,7 @@ end
 #   heroku config:set REDIS_PROVIDER=REDISTOGO_URL
 #
 
+Sidekiq.default_timezone = "Asia/Shanghai"
 Sidekiq::Client.default_context = Sidekiq::Client::Context.new
 
 Kemal.run

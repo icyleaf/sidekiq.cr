@@ -32,7 +32,7 @@ class SomeServerMiddleware < Sidekiq::Middleware::ServerEntry
   end
 end
 
-cli = Sidekiq::CLI.new
+cli = Sidekiq::CLI.new(timezone: "Asia/Shanghai")
 server = cli.configure do |config|
   config.server_middleware.add SomeServerMiddleware.new
   config.client_middleware.add SomeClientMiddleware.new

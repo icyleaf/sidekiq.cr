@@ -10,6 +10,14 @@ describe Sidekiq::Logger do
       io.to_s.should match /INFO: test/
     end
 
+    it "logs accepts timezone" do
+      io = IO::Memory.new
+      log = Sidekiq::Logger.build(io, timezone: "Asia/Shanghai")
+      log.info "test"
+      io.to_s.should match /INFO: test/
+      io.to_s.should match /\+0800/
+    end
+
     it "allows multi-level context" do
       io = IO::Memory.new
       log = Sidekiq::Logger.build(io)

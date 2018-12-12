@@ -46,7 +46,7 @@ module Sidekiq
       @queue = "default"
       @args = "[]"
       @klass = ""
-      @created_at = Time.now.to_utc
+      @created_at = Time.now(Sidekiq.default_timezone)
       @enqueued_at = nil
       @jid = Random::Secure.hex(12)
       @retry = true
@@ -88,7 +88,7 @@ module Sidekiq
     # Run this job at or after the given instant in Time
     def _perform_at(interval : Time, args : String)
       @args = args
-      @at = interval if interval > Time.now
+      @at = interval if interval > Time.now(Sidekiq.default_timezone)
       client.push(self)
     end
 
