@@ -4,7 +4,7 @@ require "../src/sidekiq/server/scheduled"
 describe "scheduler" do
   requires_redis(:>=, "3.2") do
     it "should schedule" do
-      load_fixtures("ruby_compat")
+      load_fixtures("test_data.json")
 
       POOL.redis do |conn|
         conn.zcard("retry").should eq(1)

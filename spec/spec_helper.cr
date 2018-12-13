@@ -68,6 +68,10 @@ class HTTP::Server::Response
   end
 end
 
-def load_fixtures(filename)
-  `ruby #{__DIR__}/fixtures/load_fixtures.rb #{__DIR__}/fixtures/#{filename}.marshal.bin`
+def load_fixtures(filename, ttl = 1000)
+  File.open("#{__DIR__}/fixtures/#{filename}", "r") do |io|
+    JSON.parse(io).as_h.each do |key, value|
+      Sidekiq.redis { |c| c.restore key, ttl, Base64.decode_string(value.as_s) }
+    end
+  end
 end

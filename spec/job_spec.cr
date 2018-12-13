@@ -4,7 +4,7 @@ describe Sidekiq::Job do
   describe "serialization" do
     requires_redis(:>=, "3.2") do
       it "deserializes a simple job" do
-        load_fixtures("ruby_compat")
+        load_fixtures("test_data.json")
 
         str = POOL.redis do |conn|
           conn.lpop("queue:default")
@@ -15,7 +15,7 @@ describe Sidekiq::Job do
       end
 
       it "deserializes a retry" do
-        load_fixtures("ruby_compat")
+        load_fixtures("test_data.json")
 
         results = POOL.redis do |conn|
           conn.zrangebyscore("retry", "-inf", "inf")
