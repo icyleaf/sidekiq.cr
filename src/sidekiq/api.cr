@@ -637,7 +637,7 @@ module Sidekiq
     end
 
     def started_at
-      Time.unix_ms((self["started_at"].as_f * 1000).to_i64)
+      Time.unix_ms((self["started_at"].as_f * 1000).to_i64).in(Sidekiq.default_timezone)
     end
 
     def tag
