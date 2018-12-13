@@ -9,6 +9,9 @@
     <link rel="shortcut icon" type="image/ico" href="<%= root_path %>images/favicon.ico" />
     <script type="text/javascript" src="<%= x.root_path %>javascripts/application.js"></script>
     <script type="text/javascript" src="<%= x.root_path %>javascripts/locales/jquery.timeago.<%= x.locale %>.js"></script>
+    <script type="text/javascript">
+      var TIMEZONE = '<%= Sidekiq.default_timezone.utc? ? "Etc/UTC" : Sidekiq.default_timezone.name %>';
+    </script>
     <meta name="google" content="notranslate" />
   </head>
   <body class="admin">
