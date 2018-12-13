@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-
+# NOTE: this script is generate test data, but not works in the latest sidekiq (ruby version)
 if File.exist?("ruby_compat.marshal.bin")
   puts "File exists, nothing to do"
   exit
