@@ -1,7 +1,10 @@
 # Sidekiq.cr
 
-[![Build Status](https://travis-ci.org/mperham/sidekiq.cr.svg)](https://travis-ci.org/mperham/sidekiq.cr)
-[![Tag](https://img.shields.io/github/tag/icyleaf/sidekiq.cr.svg)](https://github.com/icyleaf/sidekiq.cr/blob/master/Changes.md)
+[![Language](https://img.shields.io/badge/language-crystal-776791.svg)](https://github.com/crystal-lang/crystal)
+[![Tag](https://img.shields.io/github/tag/icyleaf/sidekiq.cr.svg)](https://github.com/icyleaf/sidekiq.cr/blob/master/CHANGELOG.md)
+[![Build Status](https://img.shields.io/circleci/project/github/icyleaf/sidekiq.cr/master.svg?style=flat)](https://circleci.com/gh/icyleaf/sidekiq.cr)
+
+> This is a fork version based on [mperham/sidekiq.cr](https://github.com/mperham/sidekiq.cr).
 
 Sidekiq is a well-regarded background job framework for Ruby.  Now we're
 bringing the awesomeness to Crystal, a Ruby-like language.  Why?  To
