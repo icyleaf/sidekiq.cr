@@ -1,0 +1,21 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: crystallang/crystal:0.27.0
+      - image: redis:alpine
+    branches:
+      ignore:
+        - gh-pages
+    working_directory: ~/sidekiq
+    steps:
+      - checkout
+      - run:
+          name: "Crystal version"
+          command: crystal version
+      - run:
+          name: "Install dependencies"
+          command: shards install
+      - run:
+          name: "Specs"
+          command: crystal spec
