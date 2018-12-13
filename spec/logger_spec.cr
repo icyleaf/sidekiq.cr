@@ -11,11 +11,17 @@ describe Sidekiq::Logger do
     end
 
     it "logs accepts timezone" do
+      default_timezone = Sidekiq.default_timezone
+
+      Sidekiq.default_timezone = "Asia/Shanghai"
       io = IO::Memory.new
-      log = Sidekiq::Logger.build(io, timezone: "Asia/Shanghai")
+      log = Sidekiq::Logger.build(io)
       log.info "test"
       io.to_s.should match /INFO: test/
       io.to_s.should match /\+0800/
+
+      # Change back
+      Sidekiq.default_timezone = default_timezone.name
     end
 
     it "allows multi-level context" do

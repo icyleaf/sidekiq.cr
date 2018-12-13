@@ -14,7 +14,11 @@ class CrystalWorker
   end
 
   def perform(x : Int64)
-    logger.info "hello!"
+    logger.info "count #{x}"
+
+    sleep 3.seconds
+    x += 1
+    CrystalWorker.async.perform_in 2.seconds, x
   end
 end
 
@@ -54,6 +58,5 @@ server = cli.configure do |config|
 end
 
 CrystalWorker.async.perform(1_i64)
-CrystalWorker.async.perform(2_i64)
 
 cli.run(server)

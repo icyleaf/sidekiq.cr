@@ -17,14 +17,14 @@ module Sidekiq
       Fiber.current.logging_context.not_nil!.pop
     end
 
-    def self.build(log_target = STDOUT, timezone = TIMEZONE)
+    def self.build(log_target = STDOUT)
       logger = ::Logger.new(log_target)
       logger.level = ::Logger::INFO
-      logger.formatter = with_logger_format(timezone)
+      logger.formatter = with_logger_format
       logger
     end
 
-    private def self.with_logger_format(timezone)
+    private def self.with_logger_format
       ::Logger::Formatter.new do |severity, time, progname, message, io|
         unless ENV["DYNO"]?
           time.in(Sidekiq.default_timezone).to_s("%FT%T.%L%z", io)
