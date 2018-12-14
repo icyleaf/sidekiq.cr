@@ -236,7 +236,7 @@ get "/scheduled/:key" do |x|
   if job
     ecr("scheduled_job_info")
   else
-    x.redirect "#{root_path}scheduled"
+    x.redirect x.url_with_query(x, "#{x.root_path}scheduled")
   end
 end
 
